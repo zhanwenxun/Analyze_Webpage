@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Analyze Webpage</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
+    <style>
+        .box {
+            display: flex;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .title {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container is-fluid is-mobile" style="margin-top: 50px;">
+        <!-- Navigation Bar -->
+        <b-navbar class="is-fixed-top is-active" centered="true">
+            <template #start class="navbar">
+                <b-navbar-item href="#part1">
+                    <b>Analyze</b>
+                </b-navbar-item>
+            </template>
+            <template #end>
+                <b-navbar-item tag="div">
+                    <b-button label="About Us" type="is-primary" size="is-medium" style="margin-right: 30px;"
+                        @click="About_Us" />
+                </b-navbar-item>
+            </template>
+        </b-navbar>
+
+        <section class="hero">
+            <div class="hero-body"
+                style="text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
+                <p class="title">
+                    Upload one data file and analyze automatically!
+                </p>
+                <b-button style="margin-right:30px;" label="Upload" type="is-primary" size="is-medium" @click="upload">
+                </b-button>
+
+                <b-button label="Run" type="is-success" size="is-medium" @click="getData"></b-button>
+            </div>
+        </section>
+
+        <!-- Upload Data File-->
+        <div style="margin-left: auto; margin-right: auto; width: 600px;">
+            <section>
+                <b-field class="file1" name="file1">
+                    <b-upload v-model="file1" accept=".csv" expanded>
+                        <a class="button is-info is-fullwidth">
+                            <b-icon icon="upload"></b-icon>
+                            <span>{{ file1.name || "Click to upload(Only .csv)"}}</span>
+                        </a>
+                    </b-upload>
+                    <b-checkbox style="margin-left: 15px;" v-model="csv">
+                        {{ csv }}
+                    </b-checkbox>
+                </b-field><br>
+
+                <b-field class="file2" name="file2">
+                    <b-upload v-model="file2" accept=".xlsx" expanded>
+                        <a class="button is-info is-fullwidth">
+                            <b-icon icon="upload"></b-icon>
+                            <span>{{ file2.name || "Click to upload(Only .xlsx)"}}</span>
+                        </a>
+                    </b-upload>
+                    <b-checkbox style="margin-left: 15px;" v-model="xlsx">
+                        {{ xlsx }}
+                    </b-checkbox>
+                </b-field>
+                <!-- <b-field>
+                    <b-upload v-model="dropFiles" multiple drag-drop expanded>
+                        <section class="section">
+                            <div class="content has-text-centered">
+                                <p>
+                                    <b-icon icon="upload" size="is-large"></b-icon>
+                                </p>
+                                <p>Drop your files here or click to upload</p>
+                            </div>
+                        </section>
+                    </b-upload>
+                </b-field>
+
+                <div class="tags">
+                    <span v-for="(file, index) in dropFiles" :key="index" class="tag is-primary">
+                        {{file.name}}
+                        <button class="delete is-small" type="button" @click="deleteDropFile(index)"></button>
+                    </span>
+                </div> -->
+            </section>
+        </div>
+
+        <!-- Show Result Figure -->
+        <section id="part1" class="section" style="margin-top: 20px; text-align: center;">
+            <!-- Age Distribution -->
+            <h2 class="title is-2">Age Distribution</h2>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image1">
+                            <img :src="src">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gender Rate -->
+            <h2 class="title is-2">Gender Rate</h2>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image2">
+                            <img :src="imageSrc[1]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RFM Distribution -->
+            <h2 class="title is-2">RFM Distribution</h2>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image3">
+                            <img :src="imageSrc[2]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sale Date by Month -->
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image4">
+                            <img :src="imageSrc[3]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image5">
+                            <img :src="imageSrc[4]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image6">
+                            <img :src="imageSrc[5]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image7">
+                            <img :src="imageSrc[6]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image8">
+                            <img :src="imageSrc[7]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image9">
+                            <img :src="imageSrc[8]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image10">
+                            <img :src="imageSrc[9]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image11">
+                            <img :src="imageSrc[10]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image12">
+                            <img :src="imageSrc[11]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image13">
+                            <img :src="imageSrc[12]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image14">
+                            <img :src="imageSrc[13]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sale Hour -->
+            <h2 class="title is-2">Sale Hour</h2>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image15">
+                            <img :src="imageSrc[14]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sale Month -->
+            <h2 class="title is-2">Sale Month</h2>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image16">
+                            <img :src="imageSrc[15]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sale Quarter -->
+            <h2 class="title is-2">Sale Quarter</h2>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <figure class="image17">
+                            <img :src="imageSrc[16]">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+
+            <!-- China Distribution -->
+            <h2 class="title is-2">China Distribution</h2>
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <div class="tile is-child box">
+                        <!-- China Map (amChart) -->
+                        <div id="chartdiv" style="width:100%; height:100vh; background-color: AliceBlue;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="content has-text-centered">
+                <p>
+                    <strong>Analyze Webpage</strong> by <a href="#">XIONG Jiaxuan/ ZHAN Wenxun</a>.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- import Vue and Buefy -->
+    <script src="https://unpkg.com/vue@2"></script>
+    <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
+    <!-- Individual components -->
+    <script src="https://unpkg.com/buefy/dist/components/upload"></script>
+    <script src="https://unpkg.com/buefy/dist/components/field"></script>
+    <!-- import Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- Import amCharts.js -->
+    <script src="https://www.amcharts.com/lib/4/core.js"></script>
+    <script src="https://www.amcharts.com/lib/4/maps.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/chinaLow.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+
+    <!-- Save File Locally -->
+    <script type="text/javascript" src="FileSaver.min.js"></script>
+
+    <script>
+        // About Us
+        var information = '<div style="text-align:center"><b>XIONG Jiaxuan<br/> ZHAN Wenxun</b></div>';
+
+        // Images Name Array
+        var images = [
+            "images/age_distribution.jpg",
+            "images/gender_rate.jpg",
+            "images/RFM_distribution.jpg",
+            "images/sale_by_date1.jpg",
+            "images/sale_by_date2.jpg",
+            "images/sale_by_date3.jpg",
+            "images/sale_by_date4.jpg",
+            "images/sale_by_date5.jpg",
+            "images/sale_by_date6.jpg",
+            "images/sale_by_date7.jpg",
+            "images/sale_by_date8.jpg",
+            "images/sale_by_date9.jpg",
+            "images/sale_by_date10.jpg",
+            "images/sale_by_date11.jpg",
+            "images/sale_by_hour.jpg",
+            "images/sale_by_month.jpg",
+            "images/sale_by_quarter.jpg"
+        ];
+
+        new Vue({
+            el: '#app',
+            data: function () {
+                return {
+                    baseurl: 'http://127.0.0.1:8000',
+                    file1: {},
+                    file2: {},
+                    dropFiles: [],
+                    imageSrc: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+                    src: '',
+                    csv: false,
+                    xlsx: false,
+                    filename: '',
+                };
+            },
+            methods: {
+                upload: function () {
+                    console.log("DropFiles: " + this.dropFiles);
+
+                    // Save Data File Locally
+                    if (this.csv) {
+                        saveAs(this.file1);
+                    }
+
+                    if (this.xlsx) {
+                        saveAs(this.file2);
+                    }
+                },
+                getData: function () {
+                    if (this.csv) {
+                        this.filename = this.file1.name;
+                    }
+
+                    if (this.xlsx) {
+                        this.filename = this.file2.name;
+                    }
+                    axios.post(this.baseurl + "/api/data", { content: this.filename }).then((res) => {
+                        var obj = JSON.parse(res.data);
+                        console.log(obj);
+                        drawMap(obj);
+                        // 给<img>的src赋值图片路径
+                        for (i = 0; i < images.length; i++) {
+                            this.imageSrc[i] = images[i];
+                        }
+                        // 触发改变，然后重新渲染页面
+                        this.src = "images/age_distribution.jpg";
+                    })
+                },
+                About_Us() {
+                    this.$buefy.dialog.alert({
+                        title: 'About Us',
+                        message: information,
+                        confirmText: 'Back'
+                    })
+                },
+                deleteDropFile(index) {
+                    this.dropFiles.splice(index, 1);
+                }
+            },
+            computed: {
+
+            }
+        });
+
+        function drawMap(obj) {
+            am4core.useTheme(am4themes_animated);
+            var map = am4core.createFromConfig({
+                "geodata": am4geodata_chinaLow,
+                "projecttion": "Miller",
+                "series": [{
+                    "type": "MapPolygonSeries",
+                    "useGeodata": true,
+                    "data": obj,
+                    "mapPolygons": {
+                        "tooltipText": "{name}: {value} people",
+                        "states": {
+                            // 这里是设置当鼠标悬浮在某个省份就显示什么颜色
+                            "hover": {
+                                "properties": {
+                                    "fill": "#FF4500"
+                                }
+                            }
+                        }
+                    },
+                    // 这里是根据value设置渐变颜色
+                    "heatRules": [{
+                        "target": "mapPolygons.template",
+                        "property": "fill",
+                        "min": "#87CEFA",
+                        "max": "#00BFFF",
+                        "dataField": "value"
+                    }]
+                }],
+                "titles": [{
+                    "text": "Comparison of the number of online shoppers in different provinces in China",
+                    "fontFamily": "Impact",
+                    "fontSize": 25,
+                    "fill": "#191970",
+                    "align": "left",
+                    "paddingTop": 50,
+                    "padding Left": 150,
+                }],
+                "paddingTop": 50,
+                "paddingBottom": 50
+            }, "chartdiv", am4maps.MapChart);
+        };
+    </script>
+</body>
+
+</html>
